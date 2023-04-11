@@ -7,11 +7,11 @@ const login = async (req, res) => {
         const { email, password } = req.body;
 
         const existingUsers = await pool.query("SELECT email, password_hash FROM users WHERE email = $1", [email]);
-        if (existingUsers.length === 0) {
+        if (existingUsers.rows.length === 0) {
             return res.status(401).json({ message: "Unauthorized" });
         }
-
-        const [targetUser] = existingUsers;
+        console.log(existingUsers);
+        const [targetUser] = existingUsers.rows;
         const password_hash = hashSha256(password);
 
         if (password_hash !== targetUser.password_hash) {
@@ -60,11 +60,11 @@ const refresh = async (req, res) => {
                 }
 
                 const existingUsers = await pool.query("SELECT email FROM users WHERE email = $1", [decoded.email]);
-                if (existingUsers.length === 0) {
+                if (existingUsers.rows.length === 0) {
                     return res.status(401).json({ message: "Unauthorized" });
                 }
 
-                const [targetUser] = existingUsers;
+                const [targetUser] = existingUsers.rows;
 
                 const accessToken = jwt.sign(
                     { "email": targetUser.email },
