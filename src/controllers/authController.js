@@ -6,6 +6,10 @@ const login = async (req, res) => {
     try {
         const { email, password } = req.body;
 
+        if (!email || !password) {
+            return res.status(400).json({ message: 'All fields are required' })
+        }
+
         const existingUsers = await pool.query("SELECT email, password_hash FROM users WHERE email = $1", [email]);
         if (existingUsers.rows.length === 0) {
             return res.status(401).json({ message: "Unauthorized" });
@@ -21,7 +25,7 @@ const login = async (req, res) => {
         const accessToken = jwt.sign(
             { "email": targetUser.email },
             process.env.ACCESS_TOKEN_SECRET,
-            { expiresIn: "1m" }
+            { expiresIn: "10m" }
         );
 
         const refreshToken = jwt.sign(
@@ -69,7 +73,7 @@ const refresh = async (req, res) => {
                 const accessToken = jwt.sign(
                     { "email": targetUser.email },
                     process.env.ACCESS_TOKEN_SECRET,
-                    { expiresIn: "1m" }
+                    { expiresIn: "10m" }
                 );
 
                 res.json({ accessToken });
