@@ -3,7 +3,7 @@ import authController from "../controllers/authController.js";
 
 const router = express.Router();
 
-router.route("/")
+router.route("/login")
     .post(authController.login);
 
 router.route("/refresh")

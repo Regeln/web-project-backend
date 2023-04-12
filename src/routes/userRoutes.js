@@ -4,11 +4,12 @@ import { verifyJWT } from "../verifyJWT.js";
 
 const router = express.Router();
 
+router.route("/signup").post(userController.createNewUser);
+
 router.use(verifyJWT);
 
 router.route("/")
-    .get(userController.getAllUsers)
-    .post(userController.createNewUser)
+    .get(userController.getUser)
     .delete(userController.deleteUser);
 
 export default router;

@@ -26,7 +26,7 @@ app.use(cookieParser());
 
 // app.use("/", require("./routes/root"));
 app.use("/auth", authRoutes);
-app.use("/users", userRoutes);
+app.use("/user", userRoutes);
 
 app.get("/products", (req, res) => {
     res.send(items);
