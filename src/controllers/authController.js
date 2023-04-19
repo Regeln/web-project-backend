@@ -14,7 +14,7 @@ const login = async (req, res) => {
         if (existingUsers.rows.length === 0) {
             return res.status(401).json({ message: "Unauthorized" });
         }
-        console.log(existingUsers);
+
         const [targetUser] = existingUsers.rows;
         const password_hash = hashSha256(password);
 
@@ -25,7 +25,7 @@ const login = async (req, res) => {
         const accessToken = jwt.sign(
             { "email": targetUser.email },
             process.env.ACCESS_TOKEN_SECRET,
-            { expiresIn: "10m" }
+            { expiresIn: "100m" }                       //!
         );
 
         const refreshToken = jwt.sign(
@@ -73,7 +73,7 @@ const refresh = async (req, res) => {
                 const accessToken = jwt.sign(
                     { "email": targetUser.email },
                     process.env.ACCESS_TOKEN_SECRET,
-                    { expiresIn: "10m" }
+                    { expiresIn: "100m" }
                 );
 
                 res.json({ accessToken });
