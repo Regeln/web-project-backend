@@ -8,7 +8,7 @@ const getUser = async (req, res) => {
             return res.status(400).json({ message: "No users found" });
         }
 
-        res.json(users.rows);
+        res.json(users.rows[0]);
     } catch (err) {
         console.log(err);
         res.status(500).json({ error: err.toString() });
@@ -51,7 +51,7 @@ const deleteUser = async (req, res) => {
             return res.status(400).json({ message: "User ID required" });
         }
 
-        const existingUsers = await pool.query("SELECT email FROM users WHERE _id = $1", [id]);
+        const existingUsers = await pool.query("SELECT _id, email FROM users WHERE _id = $1", [id]);
         if (existingUsers.rows.length === 0) {
             return res.status(400).json({ message: "User not found" });
         }
